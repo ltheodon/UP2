@@ -1,0 +1,71 @@
+clear all
+close all
+
+
+
+
+nmean = 10;
+lambda = nmean/(1024*1024);
+I_size = 1024;
+Rmin = 15;
+Rmax = 40;
+
+
+[I,am,pm] = generateImage(lambda,I_size,Rmin,Rmax);
+
+
+figure
+imshow(I,[]);
+
+
+n_img = 100;
+As = zeros(1,n_img);
+Ps = zeros(1,n_img);
+Es = zeros(1,n_img);
+as = zeros(1,n_img);
+ps = zeros(1,n_img);
+
+
+parfor k=1:n_img
+    [I,am,pm] = generateImage(lambda,I_size,Rmin,Rmax);
+    As(k) = bwarea(I)/(I_size^2);
+    Ps(k) = bwarea(bwperim(I,8))/(I_size^2);
+    Es(k) = bweuler(I,8)/(I_size^2);
+    as(k) = am;
+    ps(k) = pm;
+%     imwrite(I,strcat('I_',num2str(nmean),'_',num2str(k),'.png'));
+end
+
+A = mean(As)
+P = mean(Ps)
+E = mean(Es)
+std(Es)
+
+am = mean(as)
+pm = mean(ps)
+
+
+
+
+options = optimset('MaxFunEvals',100000,'MaxIter',100000,'TolFun',1e-5);
+fun = @(x) 100*abs( pi*E - (1-A) * (x*pi -  ( 1/2*P / (1-A) )^2) );
+x0 = [1];
+x3 = fminsearch(fun,x0,options)
+
+options = optimset('MaxFunEvals',100000,'MaxIter',100000,'TolFun',1e-5);
+fun = @(x) abs( P - (1-A)*x*x3 );
+x0 = [1];
+x2 = fminsearch(fun,x0,options)
+
+options = optimset('MaxFunEvals',100000,'MaxIter',100000,'TolFun',1e-5);
+fun = @(x) abs( A-1+exp(-x*x3) );
+x0 = [1];
+x1 = fminsearch(fun,x0,options)
+
+
+abs(am-x1)/am*100
+abs(pm-x2)/pm*100
+abs(lambda-x3)/lambda*100
+
+
+
