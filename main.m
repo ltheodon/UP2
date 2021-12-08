@@ -12,11 +12,11 @@ Rmax = 40;
 
 
 % [I,am,pm] = generateImage(lambda,I_size,Rmin,Rmax);
-[I,am,pm] = generateImage2(lambda,I_size,Rmin,Rmax);
+% [I,am,pm] = generateImage2(lambda,I_size,Rmin,Rmax);
 
 
-figure
-imshow(I,[]);
+% figure
+% imshow(I,[]);
 
 
 n_img = 200;
@@ -37,6 +37,7 @@ parfor k=1:n_img
 %     I = imread(strcat('pix20/I_20_',num2str(k),'.png'));
     I = imread(strcat('pix250/I_250_',num2str(k),'.png'));
 %     I = imread(strcat('pix400/I_400_',num2str(k),'.png'));
+%     I = imread(strcat('2048/I_400_',num2str(k),'.png'));
 %     I = imread(strcat('pix600/I_600_',num2str(k),'.png'));
 %     I = imread(strcat('1024/I_1000_',num2str(k),'.png'));
     As(k) = bwarea(I)/(I_size^2);
