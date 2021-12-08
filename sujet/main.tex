@@ -1,13 +1,14 @@
 \documentclass{article}
 \usepackage{graphicx}
+\usepackage{amsmath}
 
 \begin{document}
 
 \section{Question 1 (10 points)}
 
-\paragraph{1.} Code a function \texttt{Poisson\_Process(lambda,x\_size,y\_size)} that generates a Poisson point process of intensity $\lambda$ in a window of size $x\_size\times y\_size$.
+%\paragraph{0.} Code a function \texttt{Poisson\_Process(lambda,x\_size,y\_size)} that generates a Poisson point process of intensity $\lambda$ in a window of size $x\_size\times y\_size$.
 
-\paragraph{2.} Code a function \texttt{Count\_Pairs(X,R)} that counts the number of pairs of points in a set $X$ located at a distance less than $R$.\\
+\paragraph{1.} Code a function \texttt{Count\_Pairs(X,R)} that counts the number of pairs of points in a set $X$ located at a distance less than $R$.\\
 
 We want to implement a function that returns a Strauss-like point process. A Strauss process is based on iterations upon a constrained\footnote{A constrained Poisson process has a fixed number of points which doesn't follow on a Poisson law anymore.} Poisson process in a window of size $[0;1]\times[0;1]$, where $X_0$ will denote the initial set of points. At each iteration, one of the points is slightly moved (e.g. according to a normal distribution of low variance). We then consider the quantity $\alpha$ defined as follows.
 
@@ -18,16 +19,26 @@ We want to implement a function that returns a Strauss-like point process. A Str
 \item[•] Finally, a number $\beta$ is drawn randomly between 0 and 1. If $\beta<\alpha$, then the point set is updated with the shifted element. Otherwise, the original set is retained.
 \end{enumerate}
 
-\paragraph{3.} Code a function \texttt{Strauss(n,gamma,R,N} that generates a Strauss point process of $n$ points and with parameters $\gamma\in[0;1]$, $R>0$ and $N$ the number of iterations.
-
+\paragraph{2.} Code a function \texttt{Strauss(n,gamma,R,N)} that generates a Strauss point process of $n$ points and with parameters $\gamma\in[0;1]$, $R>0$ and $N$ the number of iterations.
 
 \begin{enumerate}
-\item[\textbf{a.}] Test your \texttt{Strauss(lambda,gamma,R,N} function with $n=100$, $\gamma = 0.1$, $R=0.2$ and $N\geq 1000$.
-\item[\textbf{b.}] Test your \texttt{Strauss(lambda,gamma,R,N} function with $n=100$, $\gamma = 0.1$, $R=0.05$ and $N\geq 1000$.
+\item[\textbf{a.}] Test your \texttt{Strauss(n,gamma,R,N)} function with $n=100$, $\gamma = 0.1$, $R=0.2$ and $N\geq 1000$.
+\item[\textbf{b.}] Test your \texttt{Strauss(n,gamma,R,N)} function with $n=100$, $\gamma = 0.1$, $R=0.05$ and $N\geq 1000$.
 \item[\textbf{c.}] What happens if $\gamma = 1$?
 \end{enumerate}
 
-\paragraph{6.} How could you both  quantitatively and qualitatively characterise the different point process you can generate with this function? (Bonus: do it.)\\
+The possible outcomes of questions \textbf{a}, \textbf{b} and \textbf{c} are illustrated below.
+
+\begin{center}
+\includegraphics[width=.3\textwidth]{agreg.png}
+\quad
+\includegraphics[width=.3\textwidth]{regulier2.png}
+\quad
+\includegraphics[width=.3\textwidth]{poisson.png}
+\end{center}
+
+
+\paragraph{3.} How could you both  quantitatively and qualitatively characterise the different point process you can generate with this function? (Bonus: do it.)\\
 
 
 
@@ -55,25 +66,37 @@ Useful MATLAB function	: \texttt{pdist}.
 
 
 
-\newpage
-
 \section{Question 2 (10 points)}
-Let us consider a set of binary images made of white particles on a black background. The particles are disks or ellipses of random radius.
+Let us consider a set of binary images of size $1024\times 1024$ made of white particles on a black background. The particles are disks or ellipses of random radius.
 
 \begin{center}
-\includegraphics[width=.4\textwidth]{I_400_2.png}
+\includegraphics[width=.3\textwidth]{I_400_2.png}
 \qquad
-\includegraphics[width=.4\textwidth]{I_250_7.png}
+\includegraphics[width=.3\textwidth]{I_250_7.png}
 \end{center}
 
-Propose and implement a method to retrieve the characteristics of the mean particle for each set of images at your disposal: area, perimeter and mean radius for disks; mean equivalent radius for ellipses. \\
+Propose and implement a method to retrieve the characteristics of the mean particle for each set of images at your disposal: area, perimeter and mean radius for disks; mean equivalent radius for ellipses.\\
 
 Explain your methodology and any assumptions you may have to make.\\
 
+Miles formulas in 2-D:
+\begin{align}
+\dfrac{A}{W_{size}} & = 1-e^{-\lambda a}\\
+\dfrac{P}{W_{size}} & = e^{-\lambda a}\times \lambda p\\
+\dfrac{\pi \chi}{W_{size}} & = e^{-\lambda a} \left( \pi x - \dfrac{1}{4}(\lambda p)^2 \right)
+\end{align}
 
-Useful Python functions: \texttt{skimage.measure.area}, \texttt{skimage.measure.perimeter}, \texttt{skimage.measure.euler\_number}, \texttt{scipy.optimize.fmin}.\\
+where $A$, $P$ and $\chi$ are the expected value of area, perimeter and euler's number measured on the images, and $a$, $p$ and $x$ their counterpart for the mean particle. The parameter $\lambda$ would be the density of particles.\\
 
-Useful MATLAB functions: \texttt{bwarea}, \texttt{bwperim}, \texttt{bweuler}, \texttt{fminsearch}.
+
+
+Useful Python functions: \texttt{skimage.measure.area}, \texttt{skimage.measure.perimeter}, \texttt{skimage.measure.euler\_number}.
+
+Optional, yet useful, Python function: \texttt{scipy.optimize.fmin}.\\
+
+Useful MATLAB functions: \texttt{bwarea}, \texttt{bwperim}, \texttt{bweuler}.
+
+Optional, yet useful, MATLAB function: \texttt{fminsearch}.
 
 
 
